@@ -81,8 +81,12 @@ The Research Scout Azure Function is a remote MCP server that exposes a
 |------------------------|-----------------------------------------------------------------------|
 | **Server name**        | `Research Scout`                                                      |
 | **Server description** | `Triggers AI research on a technology, tool, or idea and publishes results to GitHub` |
-| **Server URL**         | `https://func-research-scout.azurewebsites.net/runtime/webhooks/mcp/sse` |
+| **Server URL**         | See your `.env` file: use `AZURE_MCP_SERVER_URL` value               |
 | **Authentication**     | **None**                                                              |
+
+   The server URL already has the authentication key embedded in it (the
+   `?code=` parameter), so set authentication to **None**. This is the same
+   pattern used by the CostEstDB MCP server in Claude.
 
 4. Click **Add** / **Save**
 

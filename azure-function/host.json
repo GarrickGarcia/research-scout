@@ -15,11 +15,6 @@
   "extensions": {
     "http": {
       "routePrefix": "api"
-    },
-    "mcp": {
-      "system": {
-        "webhookAuthorizationLevel": "Anonymous"
-      }
     }
   }
 }
