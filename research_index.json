@@ -2,6 +2,17 @@
   "last_updated": "2026-04-09T00:00:00Z",
   "entries": [
     {
+      "id": "2026-04-09-zapier-sdk",
+      "title": "Zapier SDK",
+      "date": "2026-04-09",
+      "source_url": "https://zapier.com/sdk",
+      "verdict": "watch",
+      "category": "automation",
+      "relevance_score": 5,
+      "summary": "TypeScript/Node.js SDK (open beta, free) giving agents and backends programmatic access to 9,000+ Zapier app integrations without OAuth management — compelling for multi-app AI agents, but Power Automate covers M365 natively and Zapier MCP already handles the Claude integration angle.",
+      "brief_path": "briefs/2026-04-09-zapier-sdk.md"
+    },
+    {
       "id": "2026-04-09-clickup",
       "title": "ClickUp",
       "date": "2026-04-09",
