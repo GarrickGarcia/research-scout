@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Research Scout -- Abonmarche Digital Solutions</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@15.0.0/marked.min.js"></script>
   <style>
     :root {
       --color-try: #1D9E75;
@@ -137,8 +138,56 @@
       color: var(--text-muted);
       font-size: 1rem;
     }
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 100;
+      overflow-y: auto;
+      padding: 2rem 1rem;
+    }
+    .modal-overlay.active { display: block; }
+    .modal-content {
+      background: var(--bg);
+      max-width: 780px;
+      margin: 0 auto;
+      border-radius: 10px;
+      padding: 2rem 2.5rem;
+      position: relative;
+      line-height: 1.7;
+    }
+    .modal-close {
+      position: sticky;
+      top: 0;
+      float: right;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 1.25rem;
+      width: 2rem;
+      height: 2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 101;
+    }
+    .modal-close:hover { background: var(--border); }
+    .modal-content h1 { font-size: 1.4rem; margin-bottom: 0.75rem; }
+    .modal-content h2 { font-size: 1.15rem; margin: 1.5rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+    .modal-content p { margin-bottom: 0.75rem; }
+    .modal-content strong { color: var(--text); }
+    .modal-content ul, .modal-content ol { margin: 0.5rem 0 0.75rem 1.5rem; }
+    .modal-content li { margin-bottom: 0.3rem; }
+    .modal-content code { background: var(--bg-card); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.85em; }
+    .modal-content pre { background: var(--bg-card); padding: 1rem; border-radius: 6px; overflow-x: auto; margin: 0.75rem 0; }
+    .modal-content pre code { background: none; padding: 0; }
+    .modal-content a { color: var(--color-try); }
     @media (max-width: 600px) {
       .metrics { grid-template-columns: repeat(2, 1fr); }
+      .modal-content { padding: 1.5rem 1rem; }
     }
   </style>
 </head>
@@ -170,6 +219,13 @@
   </div>
 
   <div id="entries-container"></div>
+
+  <div class="modal-overlay" id="brief-modal">
+    <div class="modal-content">
+      <button class="modal-close" id="modal-close">&times;</button>
+      <div id="brief-body"></div>
+    </div>
+  </div>
 
   <script>
     (async function() {
@@ -251,7 +307,35 @@
         });
         container.appendChild(section);
       });
+      // Brief modal: intercept clicks on brief links
+      container.addEventListener('click', async function(e) {
+        var link = e.target.closest('a');
+        if (!link || !link.href || !link.href.endsWith('.md')) return;
+        e.preventDefault();
+        var modal = document.getElementById('brief-modal');
+        var body = document.getElementById('brief-body');
+        body.innerHTML = '<p style="color:var(--text-muted)">Loading...</p>';
+        modal.classList.add('active');
+        try {
+          var resp = await fetch(link.getAttribute('href'));
+          var md = await resp.text();
+          body.innerHTML = marked.parse(md);
+        } catch (err) {
+          body.innerHTML = '<p>Could not load brief.</p>';
+        }
+      });
     })();
+
+    // Close modal
+    document.getElementById('modal-close').addEventListener('click', function() {
+      document.getElementById('brief-modal').classList.remove('active');
+    });
+    document.getElementById('brief-modal').addEventListener('click', function(e) {
+      if (e.target === this) this.classList.remove('active');
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') document.getElementById('brief-modal').classList.remove('active');
+    });
   </script>
 </body>
 </html>
