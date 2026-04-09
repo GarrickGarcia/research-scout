@@ -1,0 +1,73 @@
+swagger: '2.0'
+info:
+  title: Research Scout
+  description: >
+    Triggers an AI research agent to investigate a technology, tool, or idea.
+    The agent researches the topic, evaluates its relevance to Abonmarche
+    Digital Solutions, writes a structured brief, and pushes results to GitHub.
+    Results appear on the dashboard within a few minutes.
+  version: 1.0.0
+host: func-research-scout.azurewebsites.net
+basePath: /api
+schemes:
+  - https
+securityDefinitions:
+  api_key:
+    type: apiKey
+    in: query
+    name: code
+security:
+  - api_key: []
+paths:
+  /trigger-research:
+    post:
+      summary: Trigger Research Scout
+      description: >
+        Send a URL, topic description, or text to Research Scout. The agent
+        will research it autonomously and publish a brief to GitHub.
+      operationId: TriggerResearch
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - message
+            properties:
+              message:
+                type: string
+                description: The URL, topic name, or description of the technology to research
+              message_type:
+                type: string
+                description: Type of message being sent
+                default: text
+                enum:
+                  - text
+                  - image
+              sender:
+                type: string
+                description: Who sent the research request (optional)
+      responses:
+        '202':
+          description: Research agent triggered successfully
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                description: Request status
+              session_id:
+                type: string
+                description: The managed agent session ID for tracking
+              message:
+                type: string
+                description: Confirmation message
+        '400':
+          description: Bad request - missing or invalid parameters
+        '502':
+          description: Failed to create agent session
