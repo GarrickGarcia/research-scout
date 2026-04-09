@@ -2,6 +2,17 @@
   "last_updated": "2026-04-09T00:00:00Z",
   "entries": [
     {
+      "id": "2026-04-07-amazon-s3-files",
+      "title": "Amazon S3 Files",
+      "date": "2026-04-07",
+      "source_url": "https://www.allthingsdistributed.com/2026/04/s3-files-and-the-changing-face-of-s3.html",
+      "verdict": "watch",
+      "category": "infrastructure",
+      "relevance_score": 3,
+      "summary": "AWS launches NFS-mountable S3 buckets via an EFS sync layer — elegant 'stage and commit' architecture that eliminates file/object copy pipelines for AI agents and data science tools, but it's AWS-only and Abonmarche runs on Azure; watch for an Azure ADLS equivalent and apply the agent data-access design lesson to future cloud-resident workflows.",
+      "brief_path": "briefs/2026-04-07-amazon-s3-files.md"
+    },
+    {
       "id": "2026-04-09-zapier-sdk",
       "title": "Zapier SDK",
       "date": "2026-04-09",
