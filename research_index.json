@@ -2,6 +2,17 @@
   "last_updated": "2026-04-09T00:00:00Z",
   "entries": [
     {
+      "id": "2026-04-09-clickup",
+      "title": "ClickUp",
+      "date": "2026-04-09",
+      "source_url": "https://clickup.com",
+      "verdict": "watch",
+      "category": "automation",
+      "relevance_score": 4,
+      "summary": "All-in-one work management platform (tasks, docs, chat, dashboards, AI) with engineering firm templates — strong product, but redundant with Abonmarche's M365 stack and has no native Power Automate connector, making deep integration painful.",
+      "brief_path": "briefs/2026-04-09-clickup.md"
+    },
+    {
       "id": "2026-04-09-evidence-dev",
       "title": "Evidence — Business Intelligence as Code",
       "date": "2026-04-09",
