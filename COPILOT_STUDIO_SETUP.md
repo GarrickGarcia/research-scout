@@ -82,16 +82,9 @@ The Research Scout Azure Function is a remote MCP server that exposes a
 | **Server name**        | `Research Scout`                                                      |
 | **Server description** | `Triggers AI research on a technology, tool, or idea and publishes results to GitHub` |
 | **Server URL**         | `https://func-research-scout.azurewebsites.net/runtime/webhooks/mcp/sse` |
-| **Authentication**     | **API key**                                                           |
+| **Authentication**     | **None**                                                              |
 
-4. For the API key value, use the master key from your `.env` file
-   (the `AZURE_FUNCTION_MASTER_KEY` value).
-
-   > If Copilot Studio asks how the key is sent, select **Query parameter**
-   > with parameter name `code`. This is how Azure Functions authenticates
-   > incoming requests.
-
-5. Click **Add** / **Save**
+4. Click **Add** / **Save**
 
 Copilot Studio will connect to the MCP server and discover the
 `trigger_research` tool automatically. You should see it listed with its
