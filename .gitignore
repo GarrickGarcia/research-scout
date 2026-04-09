@@ -1,3 +1,5 @@
+*.code-workspace
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -200,6 +202,12 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# Azure Function local settings
+azure-function/local.settings.json
+
+# Deployment artifacts
+deploy.zip
 
 # Marimo
 marimo/_static/

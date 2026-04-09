@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research Scout -- Abonmarche Digital Solutions</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --color-try: #1D9E75;
+      --color-watch: #BA7517;
+      --color-skip: #B4B2A9;
+      --bg: #ffffff;
+      --bg-card: #f8f8f8;
+      --text: #1a1a1a;
+      --text-muted: #666666;
+      --border: #e0e0e0;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a1a;
+        --bg-card: #2a2a2a;
+        --text: #e8e8e8;
+        --text-muted: #999999;
+        --border: #3a3a3a;
+      }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .metric-card .value {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .metric-card .label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .metric-card.try .value { color: var(--color-try); }
+    .metric-card.watch .value { color: var(--color-watch); }
+    .metric-card.skip .value { color: var(--color-skip); }
+    .chart-container {
+      max-width: 300px;
+      margin: 0 auto 2rem;
+    }
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 1.5rem 0 0.75rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+    .entry-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1rem 1rem 1.25rem;
+      margin-bottom: 0.75rem;
+      border-left: 4px solid var(--border);
+    }
+    .entry-card.try_it { border-left-color: var(--color-try); }
+    .entry-card.watch { border-left-color: var(--color-watch); }
+    .entry-card.skip { border-left-color: var(--color-skip); }
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.25rem;
+    }
+    .entry-title {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    .entry-title a {
+      color: var(--text);
+      text-decoration: none;
+    }
+    .entry-title a:hover { text-decoration: underline; }
+    .entry-date {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .entry-meta {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .badge {
+      font-size: 0.65rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 9999px;
+      background: var(--border);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .entry-summary {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 4rem 1rem;
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+    @media (max-width: 600px) {
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <h1>Research Scout -- Abonmarche Digital Solutions</h1>
+  <p class="subtitle">AI-powered research pipeline for evaluating new tools and technologies</p>
+
+  <div class="metrics">
+    <div class="metric-card">
+      <div class="value" id="total">0</div>
+      <div class="label">Total Researched</div>
+    </div>
+    <div class="metric-card try">
+      <div class="value" id="try-count">0</div>
+      <div class="label">Try It</div>
+    </div>
+    <div class="metric-card watch">
+      <div class="value" id="watch-count">0</div>
+      <div class="label">Watch</div>
+    </div>
+    <div class="metric-card skip">
+      <div class="value" id="skip-count">0</div>
+      <div class="label">Skip</div>
+    </div>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="verdict-chart"></canvas>
+  </div>
+
+  <div id="entries-container"></div>
+
+  <script>
+    (async function() {
+      let data;
+      try {
+        const resp = await fetch('research_index.json');
+        data = await resp.json();
+      } catch (e) {
+        document.getElementById('entries-container').innerHTML =
+          '<div class="empty-state">No research yet -- drop a link in your Teams channel to get started</div>';
+        return;
+      }
+
+      const entries = data.entries || [];
+
+      if (entries.length === 0) {
+        document.getElementById('entries-container').innerHTML =
+          '<div class="empty-state">No research yet -- drop a link in your Teams channel to get started</div>';
+        return;
+      }
+
+      const tryIt = entries.filter(e => e.verdict === 'try_it');
+      const watch = entries.filter(e => e.verdict === 'watch');
+      const skip = entries.filter(e => e.verdict === 'skip');
+
+      document.getElementById('total').textContent = entries.length;
+      document.getElementById('try-count').textContent = tryIt.length;
+      document.getElementById('watch-count').textContent = watch.length;
+      document.getElementById('skip-count').textContent = skip.length;
+
+      // Donut chart
+      if (entries.length > 0) {
+        new Chart(document.getElementById('verdict-chart'), {
+          type: 'doughnut',
+          data: {
+            labels: ['Try It', 'Watch', 'Skip'],
+            datasets: [{
+              data: [tryIt.length, watch.length, skip.length],
+              backgroundColor: ['#1D9E75', '#BA7517', '#B4B2A9'],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { position: 'bottom' }
+            },
+            cutout: '60%'
+          }
+        });
+      }
+
+      // Entry cards grouped by verdict
+      const container = document.getElementById('entries-container');
+      const groups = [
+        { label: 'Try It', entries: tryIt, cls: 'try_it' },
+        { label: 'Watch', entries: watch, cls: 'watch' },
+        { label: 'Skip', entries: skip, cls: 'skip' }
+      ];
+
+      groups.forEach(group => {
+        if (group.entries.length === 0) return;
+        const section = document.createElement('div');
+        section.innerHTML = '<h2 class="section-title">' + group.label + ' (' + group.entries.length + ')</h2>';
+        group.entries.sort((a, b) => b.date.localeCompare(a.date));
+        group.entries.forEach(entry => {
+          const card = document.createElement('div');
+          card.className = 'entry-card ' + group.cls;
+          card.innerHTML =
+            '<div class="entry-header">' +
+              '<span class="entry-title"><a href="' + (entry.brief_path || '#') + '">' + entry.title + '</a></span>' +
+              '<span class="entry-date">' + entry.date + '</span>' +
+            '</div>' +
+            '<div class="entry-meta">' +
+              '<span class="badge">' + (entry.category || '').replace(/_/g, ' ') + '</span>' +
+            '</div>' +
+            '<div class="entry-summary">' + (entry.summary || '') + '</div>';
+          section.appendChild(card);
+        });
+        container.appendChild(section);
+      });
+    })();
+  </script>
+</body>
+</html>
