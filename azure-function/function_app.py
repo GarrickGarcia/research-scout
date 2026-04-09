@@ -1,7 +1,7 @@
 """
-Research Scout -- Azure Function
-Thin proxy that receives messages from Power Automate and triggers
-a Claude Managed Agent session to research the topic.
+Research Scout -- Azure Function (Remote MCP Server)
+Exposes a trigger_research MCP tool that kicks off a Claude Managed Agent
+session to research a topic and push results to GitHub.
 """
 
 import json
@@ -12,6 +12,7 @@ import azure.functions as func
 import requests
 
 app = func.FunctionApp()
+logger = logging.getLogger("research-scout")
 
 ANTHROPIC_API = "https://api.anthropic.com/v1"
 ANTHROPIC_HEADERS_BASE = {
@@ -20,8 +21,8 @@ ANTHROPIC_HEADERS_BASE = {
     "content-type": "application/json",
 }
 
-# Git setup instructions included in every user message so the agent
-# can clone, commit, and push to the research-scout repo.
+# Git setup instructions appended to every user message so the managed
+# agent can clone, commit, and push to the research-scout repo.
 GIT_INSTRUCTIONS = """
 After completing your research, do the following:
 1. Run: git clone {clone_url} /home/user/research-scout
@@ -47,45 +48,116 @@ def _anthropic_headers():
     return headers
 
 
-def _build_content_blocks(message, message_type, clone_url):
-    """Build the content array for the user message event."""
+def _trigger_session(research_topic):
+    """Create a Managed Agent session and send the research request.
+
+    Returns (session_id, error_message). On success error_message is None.
+    """
+    headers = _anthropic_headers()
+    agent_id = _get_env("RESEARCH_AGENT_ID")
+    env_id = _get_env("RESEARCH_ENVIRONMENT_ID")
+    clone_url = _get_env("GITHUB_CLONE_URL")
     git_steps = GIT_INSTRUCTIONS.format(clone_url=clone_url)
 
-    if message_type == "image":
-        return [
-            {
-                "type": "image",
-                "source": {
-                    "type": "base64",
-                    "media_type": "image/png",
-                    "data": message,
-                },
-            },
-            {
-                "type": "text",
-                "text": (
-                    "Research the tool, technology, or idea shown in this screenshot."
-                    + git_steps
-                ),
-            },
-        ]
+    # Create session
+    session_resp = requests.post(
+        f"{ANTHROPIC_API}/sessions",
+        headers=headers,
+        json={
+            "agent": agent_id,
+            "environment_id": env_id,
+            "title": f"Research: {research_topic[:50]}",
+        },
+        timeout=30,
+    )
+    session_resp.raise_for_status()
+    session_id = session_resp.json()["id"]
+    logger.info("Session %s created for topic: %s", session_id, research_topic[:80])
 
-    return [
-        {
-            "type": "text",
-            "text": f"Research this for me: {message}{git_steps}",
-        }
-    ]
+    # Send user message
+    event_resp = requests.post(
+        f"{ANTHROPIC_API}/sessions/{session_id}/events",
+        headers=headers,
+        json={
+            "events": [{
+                "type": "user.message",
+                "content": [{
+                    "type": "text",
+                    "text": f"Research this for me: {research_topic}{git_steps}",
+                }],
+            }],
+        },
+        timeout=30,
+    )
+    event_resp.raise_for_status()
+    logger.info("Message sent to session %s", session_id)
 
+    return session_id, None
+
+
+# ---------------------------------------------------------------------------
+# MCP Tool: trigger_research
+# ---------------------------------------------------------------------------
+
+@app.generic_trigger(
+    arg_name="context",
+    type="mcpToolTrigger",
+    toolName="trigger_research",
+    description=(
+        "Trigger Research Scout to research a technology, tool, or idea. "
+        "Provide a URL, topic description, or summary of what to research. "
+        "The research agent will investigate the topic, evaluate its relevance "
+        "to Abonmarche Digital Solutions work, write a structured brief, and "
+        "push results to the research-scout GitHub repository. Results appear "
+        "on the dashboard at https://garrickgarcia.github.io/research-scout/dashboard.html "
+        "within a few minutes."
+    ),
+    toolProperties=(
+        '[{"propertyName":"topic","propertyType":"string",'
+        '"description":"The URL, topic name, or description of the technology/tool/idea to research. '
+        'If the user sent an image, describe what the image shows and include any URLs or product names visible in it."}]'
+    ),
+)
+def trigger_research_mcp(context) -> str:
+    """MCP tool: trigger_research"""
+    try:
+        content = json.loads(context)
+        args = content.get("arguments", content)
+        topic = args.get("topic", "").strip()
+
+        if not topic:
+            return json.dumps({"error": "Missing 'topic' parameter"})
+
+        session_id, error = _trigger_session(topic)
+        if error:
+            return json.dumps({"error": error})
+
+        return json.dumps({
+            "status": "accepted",
+            "session_id": session_id,
+            "message": (
+                f"Research agent triggered successfully. "
+                f"Results will appear on the dashboard in a few minutes: "
+                f"https://garrickgarcia.github.io/research-scout/dashboard.html"
+            ),
+        })
+
+    except Exception as e:
+        logger.error("trigger_research failed: %s", e)
+        return json.dumps({"error": f"Failed to trigger research: {str(e)}"})
+
+
+# ---------------------------------------------------------------------------
+# HTTP endpoint (fallback for direct testing or other integrations)
+# ---------------------------------------------------------------------------
 
 @app.route(
     route="trigger-research",
     methods=["POST"],
     auth_level=func.AuthLevel.FUNCTION,
 )
-def trigger_research(req: func.HttpRequest) -> func.HttpResponse:
-    """Accept a research request and fire off a Managed Agent session."""
-    # Parse request body
+def trigger_research_http(req: func.HttpRequest) -> func.HttpResponse:
+    """HTTP fallback -- accepts JSON and triggers a research session."""
     try:
         body = req.get_json()
     except ValueError:
@@ -95,97 +167,30 @@ def trigger_research(req: func.HttpRequest) -> func.HttpResponse:
             mimetype="application/json",
         )
 
-    message = body.get("message", "").strip()
-    message_type = body.get("message_type", "text")
-    sender = body.get("sender", "unknown")
-
-    if not message:
+    topic = body.get("message", "").strip()
+    if not topic:
         return func.HttpResponse(
             json.dumps({"error": "Missing 'message' field"}),
             status_code=400,
             mimetype="application/json",
         )
 
-    if message_type not in ("text", "image"):
-        return func.HttpResponse(
-            json.dumps({"error": "message_type must be 'text' or 'image'"}),
-            status_code=400,
-            mimetype="application/json",
-        )
-
-    # Read config from app settings
     try:
-        agent_id = _get_env("RESEARCH_AGENT_ID")
-        env_id = _get_env("RESEARCH_ENVIRONMENT_ID")
-        clone_url = _get_env("GITHUB_CLONE_URL")
-        headers = _anthropic_headers()
-    except ValueError as e:
-        logging.error("Configuration error: %s", e)
-        return func.HttpResponse(
-            json.dumps({"error": "Server configuration error"}),
-            status_code=500,
-            mimetype="application/json",
-        )
-
-    # Create a session
-    title = f"Research: {message[:50]}"
-    try:
-        session_resp = requests.post(
-            f"{ANTHROPIC_API}/sessions",
-            headers=headers,
-            json={
-                "agent": agent_id,
-                "environment_id": env_id,
-                "title": title,
-            },
-            timeout=30,
-        )
-        session_resp.raise_for_status()
-        session_id = session_resp.json()["id"]
+        session_id, error = _trigger_session(topic)
+        if error:
+            return func.HttpResponse(
+                json.dumps({"error": error}),
+                status_code=502,
+                mimetype="application/json",
+            )
     except Exception as e:
-        logging.error("Failed to create session: %s", e)
+        logger.error("HTTP trigger_research failed: %s", e)
         return func.HttpResponse(
-            json.dumps({"error": "Failed to create agent session"}),
+            json.dumps({"error": f"Failed to trigger research: {str(e)}"}),
             status_code=502,
             mimetype="application/json",
         )
 
-    logging.info(
-        "Session %s created for sender=%s message_type=%s",
-        session_id, sender, message_type,
-    )
-
-    # Send the user message
-    content = _build_content_blocks(message, message_type, clone_url)
-    try:
-        event_resp = requests.post(
-            f"{ANTHROPIC_API}/sessions/{session_id}/events",
-            headers=headers,
-            json={
-                "events": [
-                    {
-                        "type": "user.message",
-                        "content": content,
-                    }
-                ]
-            },
-            timeout=30,
-        )
-        event_resp.raise_for_status()
-    except Exception as e:
-        logging.error("Failed to send message to session %s: %s", session_id, e)
-        return func.HttpResponse(
-            json.dumps({
-                "error": "Session created but failed to send message",
-                "session_id": session_id,
-            }),
-            status_code=502,
-            mimetype="application/json",
-        )
-
-    logging.info("Message sent to session %s", session_id)
-
-    # Return immediately -- the agent works asynchronously
     return func.HttpResponse(
         json.dumps({
             "status": "accepted",
