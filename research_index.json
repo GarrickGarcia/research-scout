@@ -44,6 +44,17 @@
       "relevance_score": 7,
       "summary": "Self-hostable, developer-first workflow automation platform with native MCP server/client support, 500+ integrations (PostgreSQL, SharePoint, Teams, ArcGIS), and AI agent nodes — a stronger alternative to Power Automate for engineering-grade AI pipelines; a prebuilt PostgreSQL MCP server template is directly relevant to CostEstDB.",
       "brief_path": "briefs/2026-04-09-n8n.md"
+    },
+    {
+      "id": "2026-04-09-make-com",
+      "title": "Make.com",
+      "date": "2026-04-09",
+      "source_url": "https://www.make.com/en",
+      "verdict": "watch",
+      "category": "automation",
+      "relevance_score": 5,
+      "summary": "Visual no-code workflow automation platform (formerly Integromat) with 3,000+ integrations, a native MCP Server that exposes scenarios as Claude/ChatGPT tools, and AI Agents in beta — compelling for CoP members who need cross-platform automation without code, but Power Automate and n8n cover Abonmarche's core use cases more effectively.",
+      "brief_path": "briefs/2026-04-09-make-com.md"
     }
   ]
 }
