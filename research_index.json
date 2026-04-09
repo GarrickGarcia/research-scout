@@ -11,6 +11,17 @@
       "relevance_score": 9,
       "summary": "Anthropic's hosted agent infrastructure (public beta) — sandboxed execution, session checkpointing, MCP-native tool connections, and multi-hour runs — eliminates months of DevOps work and directly extends CostEstDB and plan-review workflows into production-grade agents.",
       "brief_path": "briefs/2026-04-09-claude-managed-agents.md"
+    },
+    {
+      "id": "2026-04-09-n8n",
+      "title": "n8n — AI Workflow Automation Platform",
+      "date": "2026-04-09",
+      "source_url": "https://n8n.io",
+      "verdict": "watch",
+      "category": "automation",
+      "relevance_score": 7,
+      "summary": "Self-hostable, developer-first workflow automation platform with native MCP server/client support, 500+ integrations (PostgreSQL, SharePoint, Teams, ArcGIS), and AI agent nodes — a stronger alternative to Power Automate for engineering-grade AI pipelines; a prebuilt PostgreSQL MCP server template is directly relevant to CostEstDB.",
+      "brief_path": "briefs/2026-04-09-n8n.md"
     }
   ]
 }
