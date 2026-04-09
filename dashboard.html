@@ -231,7 +231,7 @@
     (async function() {
       let data;
       try {
-        const resp = await fetch('research_index.json');
+        const resp = await fetch('research_index.json?t=' + Date.now());
         data = await resp.json();
       } catch (e) {
         document.getElementById('entries-container').innerHTML =
