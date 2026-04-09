@@ -1,4 +1,16 @@
 {
   "last_updated": "2026-04-09T00:00:00Z",
-  "entries": []
+  "entries": [
+    {
+      "id": "2026-04-09-claude-managed-agents",
+      "title": "Claude Managed Agents",
+      "date": "2026-04-09",
+      "source_url": "https://claude.ai/blog/claude-managed-agents",
+      "verdict": "try_it",
+      "category": "ai_platform",
+      "relevance_score": 9,
+      "summary": "Anthropic's hosted agent infrastructure (public beta) — sandboxed execution, session checkpointing, MCP-native tool connections, and multi-hour runs — eliminates months of DevOps work and directly extends CostEstDB and plan-review workflows into production-grade agents.",
+      "brief_path": "briefs/2026-04-09-claude-managed-agents.md"
+    }
+  ]
 }
