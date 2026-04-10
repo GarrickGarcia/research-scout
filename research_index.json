@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-09T00:00:00Z",
+  "last_updated": "2026-04-10T00:00:00Z",
   "entries": [
     {
       "id": "2026-04-07-amazon-s3-files",
@@ -77,6 +77,17 @@
       "relevance_score": 5,
       "summary": "Visual no-code workflow automation platform (formerly Integromat) with 3,000+ integrations, a native MCP Server that exposes scenarios as Claude/ChatGPT tools, and AI Agents in beta — compelling for CoP members who need cross-platform automation without code, but Power Automate and n8n cover Abonmarche's core use cases more effectively.",
       "brief_path": "briefs/2026-04-09-make-com.md"
+    },
+    {
+      "id": "2026-04-10-make-grid",
+      "title": "Make Grid: From Map to Workspace",
+      "date": "2026-04-10",
+      "source_url": "https://www.make.com/en/grid",
+      "verdict": "watch",
+      "category": "automation",
+      "relevance_score": 5,
+      "summary": "Make.com's auto-generated real-time visual map of an entire automation and AI landscape (Open Beta, June 2025), now evolving from read-only dependency map into an interactive workspace with editing, annotation, and collaboration — compelling governance concept for growing automation estates, but only maps Make-native scenarios and Abonmarche's core stack is Power Automate.",
+      "brief_path": "briefs/2026-04-10-make-grid.md"
     }
   ]
 }
