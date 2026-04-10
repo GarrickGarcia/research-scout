@@ -1,6 +1,17 @@
 {
-  "last_updated": "2026-04-10T00:00:00Z",
+  "last_updated": "2026-04-10T12:00:00Z",
   "entries": [
+    {
+      "id": "2026-04-10-claude-advisor-strategy",
+      "title": "Claude Advisor Strategy (Advisor Tool)",
+      "date": "2026-04-10",
+      "source_url": "https://claude.com/blog/the-advisor-strategy",
+      "verdict": "try_it",
+      "category": "ai_platform",
+      "relevance_score": 9,
+      "summary": "Anthropic's new server-side API feature (public beta) pairs Sonnet/Haiku as an executor with Opus as an on-demand advisor — one-line API change that delivers near-Opus intelligence at Sonnet-level cost (+2.7pt SWE-bench score, 11.9% cost reduction); directly applicable to CostEstDB agents, plan review automation, and the Claude Enterprise business case.",
+      "brief_path": "briefs/2026-04-10-claude-advisor-strategy.md"
+    },
     {
       "id": "2026-04-07-amazon-s3-files",
       "title": "Amazon S3 Files",
