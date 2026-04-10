@@ -1,6 +1,17 @@
 {
-  "last_updated": "2026-04-10T12:00:00Z",
+  "last_updated": "2026-04-10T18:00:00Z",
   "entries": [
+    {
+      "id": "2026-04-10-claude-ultra-plan",
+      "title": "Claude Ultra Plan: Ultraplan Feature + Leaked Ultra Subscription Tier",
+      "date": "2026-04-10",
+      "source_url": "https://code.claude.com/docs/en/ultraplan",
+      "verdict": "try_it",
+      "category": "ai_platform",
+      "relevance_score": 8,
+      "summary": "Two related 'Ultra' things in Claude's ecosystem: (1) /ultraplan — a shipped Claude Code research-preview feature that offloads CLI planning to the cloud with inline browser review, three plan modes (Simple/Visual/Deep with sub-agents), and execute-to-PR workflow; (2) a leaked 'Ultra' subscription tier above Max (~$100/mo) found in Claude Code's npm source, tied to unshipped Coordinator Mode and AutoDream — directly relevant to Claude Code dev workflows and AI platform strategy.",
+      "brief_path": "briefs/2026-04-10-claude-ultra-plan.md"
+    },
     {
       "id": "2026-04-10-claude-advisor-strategy",
       "title": "Claude Advisor Strategy (Advisor Tool)",
