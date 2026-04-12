@@ -1,6 +1,17 @@
 {
-  "last_updated": "2026-04-10T18:00:00Z",
+  "last_updated": "2026-04-12T00:00:00Z",
   "entries": [
+    {
+      "id": "2026-04-12-claude-skills-dynamic-context-injection",
+      "title": "Claude Skills: Dynamic Context Injection via !`command` Syntax",
+      "date": "2026-04-12",
+      "source_url": "https://code.claude.com/docs/en/skills#inject-dynamic-context",
+      "verdict": "try_it",
+      "category": "dev_tools",
+      "relevance_score": 9,
+      "summary": "Advanced Claude Code skill pattern using !`command` syntax to run shell commands (GitHub CLI, psql, arcpy, curl, etc.) before skill content is sent to Claude — output replaces the placeholder, enabling live data injection (PR diffs, DB schemas, test results) and turning reusable skills into self-refreshing context pipelines; directly applicable to CostEstDB, plan review, ArcGIS workflows, and CoP demos.",
+      "brief_path": "briefs/2026-04-12-claude-skills-dynamic-context-injection.md"
+    },
     {
       "id": "2026-04-10-claude-ultra-plan",
       "title": "Claude Ultra Plan: Ultraplan Feature + Leaked Ultra Subscription Tier",
