@@ -2,6 +2,17 @@
   "last_updated": "2026-04-12T00:00:00Z",
   "entries": [
     {
+      "id": "2026-04-12-dotnet-skills",
+      "title": "dotnet-skills",
+      "date": "2026-04-12",
+      "source_url": "https://github.com/managedcode/dotnet-skills",
+      "verdict": "watch",
+      "category": "dev_tools",
+      "relevance_score": 6,
+      "summary": "Installable .NET skill catalog and CLI (dotnet tool install --global dotnet-skills) that gives Claude Code and other AI agents accurate, up-to-date .NET patterns via 64 SKILL.md files covering Azure Functions, MCP C# SDK, Semantic Kernel, EF Core, and more — high value if Garrick's Azure Functions or MCP servers are C#, zero value if they're Python.",
+      "brief_path": "briefs/2026-04-12-dotnet-skills.md"
+    },
+    {
       "id": "2026-04-12-claude-skills-dynamic-context-injection",
       "title": "Claude Skills: Dynamic Context Injection via !`command` Syntax",
       "date": "2026-04-12",
