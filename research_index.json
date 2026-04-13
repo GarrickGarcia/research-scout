@@ -1,6 +1,17 @@
 {
-  "last_updated": "2026-04-12T00:00:00Z",
+  "last_updated": "2026-04-13T00:00:00Z",
   "entries": [
+    {
+      "id": "2026-04-13-ducklake-v1",
+      "title": "DuckLake v1.0",
+      "date": "2026-04-13",
+      "source_url": "https://ducklake.select/2026/04/13/ducklake-10/",
+      "verdict": "watch",
+      "category": "database",
+      "relevance_score": 6,
+      "summary": "Production-ready lakehouse format (MIT, DuckDB extension) that stores Parquet data on Azure Blob Storage while keeping all metadata in a standard SQL database — PostgreSQL is a first-class catalog, aligning with CostEstDB's existing Postgres-on-Azure stack; new GEOMETRY type with spatial filter pushdown is GIS-adjacent, but no immediate pain point maps to current projects.",
+      "brief_path": "briefs/2026-04-13-ducklake-v1.md"
+    },
     {
       "id": "2026-04-12-dotnet-skills",
       "title": "dotnet-skills",
