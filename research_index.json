@@ -1,6 +1,17 @@
 {
-  "last_updated": "2026-04-13T00:00:00Z",
+  "last_updated": "2026-04-15T00:00:00Z",
   "entries": [
+    {
+      "id": "2026-04-15-geospatial-skills",
+      "title": "Geospatial Skills for Claude Code (opengeos/geoai-skills)",
+      "date": "2026-04-15",
+      "source_url": "https://github.com/opengeos/geoai-skills",
+      "verdict": "try_it",
+      "category": "gis",
+      "relevance_score": 8,
+      "summary": "Claude Code plugin (8 skills) for geospatial workflows — inspect raster/vector files, download NAIP/Sentinel-2 imagery, query Overture Maps, run AI object detection (buildings, cars, GroundedSAM), and recover session memory; built on GeoAI Python library with PostGIS support; directly applicable to CostEstDB spatial queries, municipal infrastructure imagery analysis, and CoP demos.",
+      "brief_path": "briefs/2026-04-15-geospatial-skills.md"
+    },
     {
       "id": "2026-04-13-ducklake-v1",
       "title": "DuckLake v1.0",
