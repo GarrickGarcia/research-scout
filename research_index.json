@@ -1,6 +1,17 @@
 {
-  "last_updated": "2026-04-15T00:00:00Z",
+  "last_updated": "2026-04-17T00:00:00Z",
   "entries": [
+    {
+      "id": "2026-04-17-microsoft-foundry-toolkit-vscode",
+      "title": "Microsoft Foundry Toolkit for VS Code (GA)",
+      "date": "2026-04-17",
+      "source_url": "https://techcommunity.microsoft.com/blog/azuredevcommunityblog/microsoft-foundry-toolkit-for-vs-code-is-now-generally-available/4511831",
+      "verdict": "watch",
+      "category": "ai_platform",
+      "relevance_score": 6,
+      "summary": "Microsoft's GA release of its unified VS Code AI agent development extension (formerly AI Toolkit) — Model Playground with 100+ models (including Claude), no-code Agent Builder, MCP Tool Catalog, Agent Inspector with F5 debugging, and one-click deploy to Foundry Agent Service; Microsoft's direct Claude Code competitor that nonetheless supports Anthropic models, making it most valuable as a CoP demo surface and a lens for the Claude Enterprise vs. M365 Copilot platform strategy comparison.",
+      "brief_path": "briefs/2026-04-17-microsoft-foundry-toolkit-vscode.md"
+    },
     {
       "id": "2026-04-15-power-apps-copilot-mcp-agent-feed",
       "title": "Power Apps: Copilot Embedding, App Skills & MCP Server for Agents",
